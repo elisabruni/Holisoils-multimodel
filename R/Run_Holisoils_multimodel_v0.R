@@ -7,7 +7,7 @@ library(gridExtra)
 library(readxl)
 library(matrixStats)
 
-PATH_functions <- "/Users/ebruni/Desktop/HOLISOILS/CODES/"
+PATH_functions <- "/PATH/TO/FOLDERS" #Choose the path where you stored the documents
 #---------------------------
 #Call required functions
 source(paste0(PATH_functions,"Holisoils_multimodel_v0.R"))
