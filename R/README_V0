@@ -1,0 +1,6 @@
+This is a test version of the multi-model tool
+The user needs to:
+ - define the PATH where the scripts are stored in the file "Run_Holisoils_multimodel_v0.R"
+ - define the PATH where the climate data is stored in the file "Forcing_data_test_run_v0.R", 
+    and insert all the data for their case study in the same file
+ - run the script "Run_Holisoils_multimodel_v0.R"
