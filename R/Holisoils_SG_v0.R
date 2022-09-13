@@ -39,6 +39,7 @@ SGmodel<-function(CN_Ratio, Bulk_Density, WFPS, vswc, Soil_Temperature, CH4_Conc
   #If WFPS not available, set it to a negative number -> it will be calculated using vswc and bulk density
   #If WFPS is available, vswc won't be used
   
+  #Calculate WFPS with vswc and bulk density, if provided as a negative number:
   if(WFPS<0){
     WFPS<-as.numeric((vswc/100)/(1 - (Bulk_Density/2.65)))
   }
@@ -168,7 +169,7 @@ Call_SG<-function(CN_Ratio, Bulk_Density, WFPS, vswc, Soil_Temperature, CH4_Conc
   #Bulk_Density a scalar (Mg m-3)
   #WFPS a scalar (water filled pore space, unitless)
   #vswc a scalar, (volumetric soil water content, %)
-  #CH4_Conc a scalar, Atmospheric CH4 concentration base (units?)
+  #CH4_Conc a scalar, Atmospheric CH4 concentration base (ppb)
   temp_vec <- Soil_Temperature[,"Temp"]
   sg_vec <- data.frame(matrix(ncol = 3, nrow = length(temp_vec)))
   colnames(sg_vec)<-c("CO2_flux","CH4_flux","N2O_flux")
