@@ -96,7 +96,6 @@
 
 
 Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
-                          #computation_time_step_fwd=1, computation_time_step_spinup=1, tolti, perche ogni modello ha il suo gia predefinito
                           start_date_simulations,
                           temperature, precipitation, potential_evapotranspiration,
                           SOC_0,C_input_spinup,C_input_fwd,clay_p,silt_p,carbonat_p, soil_thickness,
@@ -196,37 +195,57 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
     legend("topleft", legend_SG,
            lty=1, col=1:2, bty="n")
   }
+
+  #Calculate total SOC stock
+  totC_Roth_C_fwd<-rowSums(Roth_C_fwd[[2]])
+  totC_ICBM_C_fwd<-rowSums(ICBM_C_fwd[[2]])
+  totC_Century_C_fwd<-rowSums(Century_C_fwd[[2]])
+  totC_Yasso07_C_fwd<-rowSums(Yasso07_C_fwd[[2]])
+  totC_AMG_C_fwd<-rowSums(AMG_C_fwd[[2]])
+  #Calculate multi-model mean of total SOC stock
+  mmmean_totC <- rowMeans(cbind(totC_Roth_C_fwd,totC_ICBM_C_fwd,
+                          totC_Century_C_fwd,totC_Yasso07_C_fwd,
+                          totC_AMG_C_fwd))
+  
+  #Calculate total CO2 fluxes
+  totF_Roth_C_fwd<-rowSums(Roth_C_fwd[[1]])
+  totF_ICBM_C_fwd<-rowSums(ICBM_C_fwd[[1]])
+  totF_Century_C_fwd<-rowSums(Century_C_fwd[[1]])
+  totF_Yasso07_C_fwd<-rowSums(Yasso07_C_fwd[[1]])
+  totF_AMG_C_fwd<-rowSums(AMG_C_fwd[[1]])
+  #Calculate multi-model mean of total CO2 fluxes
+  mmmean_totF <- rowMeans(cbind(totF_Roth_C_fwd,totF_ICBM_C_fwd,
+                                totF_Century_C_fwd,totF_Yasso07_C_fwd,
+                                totF_AMG_C_fwd))
   
   #PLOT MULTIMODEL
-  
   if(plot_figures==TRUE){
     #plot total C stocks
-    plot(t_fwd, rowSums(Roth_C_fwd[[2]]), type="l", lty=1, col="red",
-            xlab="Time (years)", ylab="C stocks (MgC/ha)", ylim=c(50,70),main="Multi-model")
-    lines(t_fwd,rowSums(ICBM_C_fwd[[2]]),type="l", lty=1, col="black")
-    lines(t_fwd,rowSums(Century_C_fwd[[2]]),type="l", lty=1, col="green")
-    lines(t_fwd,rowSums(Yasso07_C_fwd[[2]]),type="l", lty=1, col="pink")
-    lines(t_fwd,rowSums(AMG_C_fwd[[2]]),type="l", lty=1, col="blue")
-    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG"),
-           lty=1, col=c("red","black","green","pink","blue"),ncol=2, bty="n")
+    plot(t_fwd, totC_Roth_C_fwd, type="l", lty=1, col="red",
+            xlab="Time (years)", ylab="C stocks (MgC/ha)", ylim=c(50,70),main="Multi-model SOC stocks")
+    lines(t_fwd,totC_ICBM_C_fwd,type="l", lty=1, col="black")
+    lines(t_fwd,totC_Century_C_fwd,type="l", lty=1, col="green")
+    lines(t_fwd,totC_Yasso07_C_fwd,type="l", lty=1, col="pink")
+    lines(t_fwd,totC_AMG_C_fwd,type="l", lty=1, col="blue")
+    lines(t_fwd,mmmean_totC,type="l", lwd = 3,col="grey")
+    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG","Mean"),
+           lty=1,lwd=c(1,1,1,1,1,3), col=c("red","black","green","pink","blue","grey"),ncol=2, bty="n")
     
     #plot CO2 fluxes
 
     plot(t_fwd, rowSums(Roth_C_fwd[[1]]), type="l", lty=1, col="red",
-         xlab="Time (years)", ylab=paste0("CO2 fluxes (MgC/ha/",time_legend,")"), ylim=c(-1,10),main="Multi-model")
+         xlab="Time (years)", ylab=paste0("CO2 fluxes (MgC/ha/",time_legend,")"), ylim=c(-1,10),main="Multi-model CO2 fluxes")
     lines(t_fwd,rowSums(ICBM_C_fwd[[1]]),type="l", lty=1, col="black")
     lines(t_fwd,rowSums(Century_C_fwd[[1]]),type="l", lty=1, col="green")
     lines(t_fwd,rowSums(Yasso07_C_fwd[[1]]),type="l", lty=1, col="pink")
     lines(t_fwd,rowSums(AMG_C_fwd[[1]]),type="l", lty=1, col="blue")
     lines(t_fwd, SG_C_fwd[,1],type="l", lty=1, col="violet")
-    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG","SG"),
-           lty=1, col=c("red","black","green","pink","blue","violet"), ncol=2,bty="n")
+    lines(t_fwd,mmmean_totF,type="l", lwd = 3,col="grey")
+    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG","SG","Mean"),
+           lty=1,lwd=c(1,1,1,1,1,3), col=c("red","black","green","pink","blue","violet","grey"), ncol=2,bty="n")
     
   }
 
   return(list(Roth_C_fwd,ICBM_C_fwd,Century_C_fwd))
   
 }
-
-
-
