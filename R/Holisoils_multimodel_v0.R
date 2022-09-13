@@ -59,15 +59,14 @@
 #         --Time--
 #'@param simulation_length               A scalar indicating the forward simulation lenght: [years]
 #'@param spinup_length                   A scalar indicating the lenght of the spinup run:  [years]
-# computation_time_step_fwd       The time step of the forward simulation:           [years]
-#computation_time_step_spinup:   The time step of the spinup run:                   [years]
 
-#'@param start_date_simulations          A `Date` object in the format "YYYY-MM-DD"" [e.g. as.Date("2021-01-01")]
+#'@param start_date_simulations          A `Date` object in the format "YYYY-MM-DD"" [e.g. as.Date("2021-01-01")] at which the experiment starts
+
 #         --Meteo
 #'@param temperature                     A `data.frame` object that has as first column the dates of measurments in the format "YYYY-MM" and as second column the monthly average temperatures [˚C]
-#'@param precipitation                   A `data.frame` object that has as first column the dates of measurments in the format "YYYY-MM" and as second column the monthly cumulative precipitations [mm/month]
+#'@param precipitation                   A `data.frame` object that has as first column the dates of measurments in the format "YYYY-MM" and as second column the monthly cumulative precipitations [mm]
 #'@param potential_evapotranspiration    A `data.frame` object that has as first column the dates of measurments in the format "YYYY-MM" and as second column the monthly potentia evapotranspiration [mm/month]
-#? soil_moisture
+
 
 #         --Soil--
 #'@param SOC_0                           A scalar indicating the level of SOC stock at the beginning of the simulation                                             [Mg/ha]
@@ -75,24 +74,29 @@
 #'@param C_input_fwd                     A vector (or scalar if information is not available) indicating the level of annual C input during the forward simulation [Mg/ha/yr]
 #'@param clay_p                          A scalar indicating the percentage concentration of clay       [%]
 #'@param silt_p                          A scalar indicating the percentage concentration of silt       [%]
+#'@param carbonat_p                      A scalar indicating the concentration of calcium carbonate in the soil [g/kg]
 #'@param soil_thickness                  A scalar indicating the thikness of the organic layer topsoil  [cm] (default is 25)
 
 #         --Litter--
-#'@param lignin_to_nitrogen              A scalar indicating Lignin:Nitrogen ratio of the litter input:          [unitless] (default is 0.5) #CHANGE!
-#'@param structural_in_lignin            A scalar indicating the fraction of structural material in the lignin:  [unitless] (default is 0.1) #CHANGE!
+#'@param lignin_to_nitrogen              A scalar indicating the Lignin:Nitrogen ratio of the litter input          [unitless] (default is 0.5) 
+#'@param structural_in_lignin            A scalar indicating the fraction of structural material in the lignin  [unitless] (default is 0.1) 
+#'@param woodylittersize                 A scalar indicating the size of the woody litter input [cm] (set to 0 for nonwoody, 2 for finewoody, and 20 for coarse woody)
 
+#'@param CN_Ratio                        A scalar indicating the Carbon:Nitrogen ratio of the soil (@5cm depth)     [unitless]
+#'@param Bulk_Density                    A scalar indicating the bulk density of the soil (@5cm depth)              [Mg m-3] 
+#'@param WFPS                            A scalar indicating the water filled pore space (@5cm depth)               [unitless] (if not available, set WFPS to <0. It will be calculated using Bulk_Density and vswc) 
+#'@param vswc                            A scalar indicating the volumetric soil water content (@5cm depth)         [%] (this is needed only if WFPS is not available) 
+#'@param CH4_Conc                        A scalar indicating the atmospheric CH4 concentration                      [ppb] (if not available, a default value from Japan will be used)
+
+#'@param historical_land_use             A string indicating what is the historical land-use of the site. It takes as input "arable", "grassland", or "forest".
 
 #       --Decomposition rate parameters
 #'@param decomposition_param_RothC       A vector of 5 elements providing the decomposition rate parameters of the RothC C pools:  [1/yr] (default is: c(k.DPM = 10, k.RPM = 0.3, k.BIO = 0.66, k.HUM = 0.02, k.IOM = 0))
 #'@param decomposition_param_ICBM        A vector of 3 elements providing: the 2 decomposition rate parameters of the ICBM C pools [1/yr] and the humification coefficient [unitless] (default is: c(k1=0.8,k2=0.00605,h=0.13))
-#'@param decomposition_param_Century     A vector of 7 elements providing the decomposition rate parameters of the Century C pools [1/week] (default is c(STR.surface = 0.076, MET.surface = 0.28, STR.belowground = 0.094, MET.belowground = 0.35, ACT = 0.14, SLW = 0.0038, PAS = 0.00013))
+#'@param decomposition_param_Century     A vector of 7 elements providing the decomposition rate parameters of the Century C pools [1/month] (default is c(STR.surface = 1/(12*0.245), MET.surface = 1/(12*0.066), STR.belowground = 1/(12*0.245), MET.belowground = 1/(12*0.066), ACT = 1/(12*0.149), SLW = 1/(12*5.480), PAS = 1/(12*241)))
+#'@param decomposition_param_Yasso07     A vector of 24 elements providing: the decomposition rate parameters of the Yasso07 C pools [1/yr] (default is kA = 0.73, kW = 5.8, kE = 0.29, kN = 0.031,kH = 0.0017); the environmental function's parameters, and the proportion of fluxes among pools
+#'@param decomposition_param_AMG         A vector of 3 elements providing: the decomposition rate of the AMG active pool [1/yr] (default is k0=0.165), and the humification coefficients of the aboveground and belowground C input
 
-#(SG)
-#         Bulk density at 0-5 cm depth:          [Mg m-3]
-#         Carbon:Nitrogen ratio at 0-5 cm depth: [unitless]
-
-#(YASSO)
-#         WoodySize - size of woody litter (for non-woody litter this is 0) [cm]
 
 
 Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
