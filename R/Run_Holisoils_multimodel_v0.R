@@ -11,7 +11,7 @@ library(readxl)
 library(matrixStats)
 
 #Define the path to the folders where the scripts are stored
-PATH_functions <- "/PATH/TO/FOLDERS" #Choose the path where you stored the documents
+PATH_functions <- "/PATH/TO/FOLDERS/" #Choose the path where you stored the documents
 #---------------------------
 #Call required functions
 source(paste0(PATH_functions,"Holisoils_multimodel_v0.R"))
