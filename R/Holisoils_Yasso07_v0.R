@@ -53,8 +53,7 @@ Call_Yasso07<-function(plot_figures,
   delta2_07<-as.numeric(decomposition_param_Yasso07["delta2"])
   r_07<-as.numeric(decomposition_param_Yasso07["r"])
 
-  #Rate modifier spinup
-  #Rate modifier forward
+
   #####
   #1)## Initialization
   #####
