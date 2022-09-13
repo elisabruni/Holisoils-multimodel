@@ -2,6 +2,13 @@
 #Define input directory
 loc_forc = "/PATH/TO/DATA/" #Choose the path where you stored the climate data
 
+#---------------------------
+#USER DEFINED PARAMETERS
+#Decide wether to plot default figures [TRUE] or not [FALSE]
+plot_figures=TRUE
+
+#Define time step forward run [in years]
+computation_time_step_fwd = 1/12
 
 #Soil data from LUCAS (GPS: 42.83861 ; -2.39256 - nearby area under revegetated soil)
 clay_site = 38 #[%]
