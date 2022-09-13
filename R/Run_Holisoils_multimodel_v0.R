@@ -1,3 +1,6 @@
+#######################################################################
+#This is the script that needs to be launched to run the simulations
+#######################################################################
 
 #Libraries that need to be installed and uploaded
 library(SoilR)
@@ -7,6 +10,7 @@ library(gridExtra)
 library(readxl)
 library(matrixStats)
 
+#Define the path to the folders where the scripts are stored
 PATH_functions <- "/PATH/TO/FOLDERS" #Choose the path where you stored the documents
 #---------------------------
 #Call required functions
@@ -18,20 +22,13 @@ source(paste0(PATH_functions,"Holisoils_AMG_v0.R"))
 source(paste0(PATH_functions,"AMG_environmental_functions.R"))
 source(paste0(PATH_functions,"Holisoils_SG_v0.R"))
 source(paste0(PATH_functions,"Forcing_data_test_run_v0.R"))
-#Yasso SoilR version
+#Yasso07 SoilR version
 #source(paste0(PATH_functions,"Holisoils_Yasso07_v0_nonFIX.R"))
 #source(paste0(PATH_functions,"Yasso07_environmental_functions.R"))
-#Yasso Boris version
+#Yasso07 Boris version
 source(paste0(PATH_functions,"Holisoils_Yasso07_v0.R"))
-source(paste0(PATH_functions,"yasso07Model.soilr.fi_function.r"))
+source(paste0(PATH_functions,"Yasso07Model_fixed.R"))
 
-#---------------------------
-#USER DEFINED PARAMETERS
-#Decide wether to plot default figures [TRUE] or not [FALSE]
-plot_figures=TRUE
-
-#Define time step forward run [in years]
-computation_time_step_fwd = 1/12
 
 #---------------------
 #Other parameters that need to be defined
