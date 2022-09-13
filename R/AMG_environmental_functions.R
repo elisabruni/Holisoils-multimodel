@@ -2,6 +2,7 @@
 #AMG environmental functions affecting decomposition
 #----------------------------------------------------------
 
+#Temperature effect
 fT.AMG <- function(Temp){
   #Temp = mean annual temperature
   aT<-25
@@ -15,7 +16,7 @@ fT.AMG <- function(Temp){
 }
 
 
-
+#Water effect
 fW.AMG <- function(Prec,Potevap){
   #Prec = cumulative annual water inputs (precipitation and irrigation water) (mm)
   #pot_evapot = potential evapotranspiration (mm)
@@ -28,6 +29,7 @@ fW.AMG <- function(Prec,Potevap){
   return(k_precip)
 }
 
+#Clay effect
 fCl.AMG1<-function(Clay){
   #clay (gclay/kgsoil)
   
@@ -37,6 +39,7 @@ fCl.AMG1<-function(Clay){
   return(k_clay)
 }
 
+#Clay effect for AMGv2
 fCl.AMG2<-function(Clay){
   #clay (gclay/kgsoil)
   
@@ -46,6 +49,7 @@ fCl.AMG2<-function(Clay){
   return(k_clay)
 }
 
+#CaCO3 effect
 fCaCO3.AMG1<-function(Carbonate){
   #carbonate (CaCO3) content (gCaCo3/kgsoil)
   
@@ -55,6 +59,7 @@ fCaCO3.AMG1<-function(Carbonate){
   return(k_carbonate)
 }
 
+#CaCO3 effect for AMGv2
 fCaCO3.AMG2<-function(Carbonate){
   #carbonate (CaCO3) content (gCaCo3/kgsoil)
   
@@ -64,6 +69,7 @@ fCaCO3.AMG2<-function(Carbonate){
   return(k_carbonate)
 }
 
+#pH effect only for AMGv2
 fpH.AMG2<-function(PH){
   apH = 0.112
   bpH = 8.5
@@ -71,6 +77,7 @@ fpH.AMG2<-function(PH){
   return(k_pH)
 }
 
+#CN ratio effect only for AMGv2
 fCN.AMG2<-function(CNratio){
   aCN = 0.060
   bCN = 11.
