@@ -73,7 +73,7 @@ ksAMG = c(k0=0.165,humABOVE=0.5,humBELOW=0.4)
 #----------------
 #Read daily temperature data
 temp_df <- read.delim(paste0(loc_forc,"942217_TAS_2001_2005.txt"),sep = ":")[,2]
-temp_df <- as.numeric(temp_df[7:length(temp_df)])-273.15 #K to C
+temp_df <- as.numeric(as.character((temp_df[7:length(temp_df)]))-273.15 #K to C
 #Repeat because not enough data
 temp_df <- c(temp_df,temp_df) #Repeat 2001-2005 twice
 #Create a dataframe for daily temperature
@@ -88,10 +88,10 @@ Temp_month$Date<-as.Date(paste(Temp_month$Group.1,"-01",sep=""))
 #----------------
 #Read daily rain data
 rain_df <- read.delim(paste0(loc_forc,"942217_PR_2001_2005.txt"),sep = ":")[,2]
-rain_df <- as.numeric(rain_df[7:length(rain_df)])# "kg m-2 s-1"
+rain_df <- as.numeric(as.character(rain_df[7:length(rain_df)]))# "kg m-2 s-1"
 #Read daily snow data
 snow_df <- read.delim(paste0(loc_forc,"942217_PRSN_2001_2005.txt"),sep = ":")[,2]
-snow_df <- as.numeric(snow_df[7:length(snow_df)]) #"kg m-2 s-1"
+snow_df <- as.numeric(as.character(snow_df[7:length(snow_df)])) #"kg m-2 s-1"
 #Calculate total precipitation and convert to mm/day
 precip_df <- (rain_df+snow_df)*60*60*24 #"kg m-2 s-1" to mm/day
 #Repeat because not enough data
@@ -116,7 +116,7 @@ Precip_month_drought$Precip <- with(Precip_month_drought,
 #--------------------------------
 #Read monthly potevap data
 potevap_df <- read.delim(paste0(loc_forc,"942217_POT_2001_2005.txt"),sep = ":")[,2]
-potevap_df <- as.numeric(potevap_df[7:length(potevap_df)]) 
+potevap_df <- as.numeric(as.character(potevap_df[7:length(potevap_df)]))
 #Convert to mm/month
 potevap_df <-potevap_df*(60*60*24)*rep(c(31,28,31,30,31,30,31,31,30,31,30,31),length(potevap_df)/12)# "kg m-2 s-1" to mm/month
 #Repeat because not enough data
