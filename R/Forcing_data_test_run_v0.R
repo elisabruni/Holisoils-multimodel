@@ -73,7 +73,7 @@ ksAMG = c(k0=0.165,humABOVE=0.5,humBELOW=0.4)
 #----------------
 #Read daily temperature data
 temp_df <- read.delim(paste0(loc_forc,"942217_TAS_2001_2005.txt"),sep = ":")[,2]
-temp_df <- as.numeric(as.character((temp_df[7:length(temp_df)]))-273.15 #K to C
+temp_df <- as.numeric(as.character((temp_df[7:length(temp_df)])))-273.15 #K to C
 #Repeat because not enough data
 temp_df <- c(temp_df,temp_df) #Repeat 2001-2005 twice
 #Create a dataframe for daily temperature
