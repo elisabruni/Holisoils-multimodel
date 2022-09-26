@@ -113,7 +113,8 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
                           decomposition_param_AMG){
   
 
-  
+  spinupcheck=10 #number of years for which the steady state is sought
+  thresholdspin=0.001 #SOC variation for which the pool is considered at steady state
   
   #---------------------------------------------
   #CREATE INTEGRALS TIME STEPS
@@ -133,14 +134,16 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
   Roth_C_fwd<-Call_RothC(plot_figures=plot_figures,
                        temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
                        SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
-                       decomposition_param_RothC=decomposition_param_RothC,t_spinup=t_spinup,t_fwd=t_fwd)
+                       decomposition_param_RothC=decomposition_param_RothC,t_spinup=t_spinup,t_fwd=t_fwd,
+                        spinupcheck=spinupcheck, thresholdspin=thresholdspin)
   print(Roth_C_fwd)
   
   #CALL ICBM
   ICBM_C_fwd<-Call_ICBM(plot_figures=plot_figures,
                          temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
                          SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
-                         decomposition_param_ICBM=decomposition_param_ICBM,t_spinup=t_spinup,t_fwd=t_fwd)
+                         decomposition_param_ICBM=decomposition_param_ICBM,t_spinup=t_spinup,t_fwd=t_fwd,
+                        spinupcheck=spinupcheck, thresholdspin=thresholdspin)
   print(ICBM_C_fwd)
   
   #CALL CENTURY
@@ -149,7 +152,8 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
                               SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,silt_p=silt_p,
                          lignin_to_nitrogen=lignin_to_nitrogen, structural_in_lignin=structural_in_lignin,
                          decomposition_param_Century=decomposition_param_Century,
-                         t_spinup=t_spinup,t_fwd=t_fwd)
+                         t_spinup=t_spinup,t_fwd=t_fwd,
+                              spinupcheck=spinupcheck, thresholdspin=thresholdspin)
 
   print(Century_C_fwd)
   
@@ -159,7 +163,8 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
                #simulation_length=simulation_length, #remove once Yasso function for temp and moist implemented
                SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,
                decomposition_param_Yasso07=decomposition_param_Yasso07,
-               t_spinup=t_spinup,t_fwd=t_fwd)
+               t_spinup=t_spinup,t_fwd=t_fwd, 
+                              spinupcheck=spinupcheck, thresholdspin=thresholdspin)
 
   print(Yasso07_C_fwd)
   
