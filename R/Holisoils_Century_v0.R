@@ -19,7 +19,8 @@ Call_Century<-function(plot_figures,
                      SOC_0,C_input_spinup,C_input_fwd,clay_p,silt_p,
                      lignin_to_nitrogen, structural_in_lignin,
                      decomposition_param_Century,
-                     t_spinup,t_fwd){
+                     t_spinup,t_fwd,
+                     spinupcheck, thresholdspin){
   
   
   #Convert input variables Century (monthly)
@@ -64,13 +65,12 @@ Call_Century<-function(plot_figures,
   CCentury_spinup=getC(Century_spinup)
   
   #Check that steady state is reached
-  datacheck=10 #number of years for which the steady state is sought
-  INIZ=CCentury_spinup[nrow(CCentury_spinup)-datacheck,] #initialize SOC pool values
-  for(row in 1:nrow(tail(CCentury_spinup,datacheck))){ 
-    pools_i = tail(CCentury_spinup,datacheck)[row,]
+  INIZ=CCentury_spinup[nrow(CCentury_spinup)-spinupcheck,] #initialize SOC pool values
+  for(row in 1:nrow(tail(CCentury_spinup,spinupcheck))){ 
+    pools_i = tail(CCentury_spinup,spinupcheck)[row,]
     deltai = (INIZ-pools_i)/INIZ
     
-    if(all(deltai<0.1)){ #Check that SOC stock variation of each pool is <0.1 for all years
+    if(all(deltai<thresholdspin)){ #Check that SOC stock variation of each pool is <thresholdspin for all years
       print("spinup ok")}else{ #Otherwise stop and increase the spinup length
         print(paste(c("current delta is",deltai,collapse = " ")))
         stop("spinup length should be increased, current annual SOC variation is ")
