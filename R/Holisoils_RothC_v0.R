@@ -57,6 +57,21 @@ Call_RothC<-function(plot_figures,
   #Get SOC spinup
   CRothC_spinup=getC(RothC_spinup)
   
+   #Check that steady state is reached
+  datacheck=10 #number of years for which the steady state is sought
+  INIZ=CRothC_spinup[nrow(CRothC_spinup)-datacheck,] #initialize SOC pool values
+  for(row in 1:nrow(tail(CRothC_spinup,datacheck))){ 
+    pools_i = tail(CRothC_spinup,datacheck)[row,]
+    deltai = (INIZ-pools_i)/INIZ
+    
+    if(all(deltai<0.1)){ #Check that SOC stock variation of each pool is <0.1 for all years
+      print("spinup ok")}else{ #Otherwise stop and increase the spinup length
+        print(paste(c("current delta is",deltai,collapse = " ")))
+        stop("spinup length should be increased, current annual SOC variation is ")
+      }
+    INIZ=pools_i
+  }
+  
   if(plot_figures==TRUE){
     #plot the pools
     matplot(ts_spinup_RothC, CRothC_spinup, type="l", lty=1, col=1:5,
