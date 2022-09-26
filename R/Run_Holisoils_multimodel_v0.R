@@ -2,6 +2,13 @@
 #This is the script that needs to be launched to run the simulations
 #######################################################################
 
+#---------------------------------
+#To install the required packages (i.e., libraries) in R, the following command can be used: install.packages(“PACKAGE_REQUIRED”)
+#Example to install SoilR:
+#Run the following command
+#install.packages("SoilR")
+#---------------------------------
+#Once the libraries installed, the user can upload them
 #Libraries that need to be installed and uploaded
 library(SoilR)
 library(dplyr)
