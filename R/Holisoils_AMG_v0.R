@@ -43,7 +43,7 @@ Call_AMG<-function(plot_figures,
   precipitation_annual <- aggregate(precipitation["Precip"],list(format(precipitation$Date,"%Y")),FUN=sum, na.rm = TRUE)
 
   #Create annual dataframe for potevap
-  potential_evapotranspiration_annual <- aggregate(potential_evapotranspiration["Potevap"],list(format(precipitation$Date,"%Y")),FUN=sum, na.rm = TRUE)
+  potential_evapotranspiration_annual <- aggregate(potential_evapotranspiration["Potevap"],list(format(potential_evapotranspiration$Date,"%Y")),FUN=sum, na.rm = TRUE)
   
 
   fT=fT.AMG(temperature_annual$Temp) #Temperature effects per year
