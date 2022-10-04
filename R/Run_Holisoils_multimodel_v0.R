@@ -41,8 +41,7 @@ source(paste0(PATH_functions,"Yasso07Model_fixed.R"))
 #Define spinup duration [years]
 spinup_length=1000
 #Define forward simulation length [years]
-#as number of data/time_step
-simulation_length=length(Temp_month$Date)/12
+simulation_length=10
 #Choose how many plots to draw in the same figure (num of rows, num of columns)
 par(mfrow=c(2,1))
 #---------------------
