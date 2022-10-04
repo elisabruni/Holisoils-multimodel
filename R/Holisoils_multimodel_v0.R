@@ -112,7 +112,7 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
                           decomposition_param_Yasso07,
                           decomposition_param_AMG){
   
-
+  
   spinupcheck=10 #number of years for which the steady state is sought
   thresholdspin=0.001 #SOC variation for which the pool is considered at steady state
   
@@ -128,44 +128,46 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
   t_spinup = seq(1,spinup_length,by=computation_time_step_spinup)
   #Create a vector of points in time where the forward solution is sought
   t_fwd = seq(1,simulation_length,by=computation_time_step_fwd)
- 
-   
+  
+  
   #CALL ROTHC
   Roth_C_fwd<-Call_RothC(plot_figures=plot_figures,
-                       temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
-                       SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
-                       decomposition_param_RothC=decomposition_param_RothC,t_spinup=t_spinup,t_fwd=t_fwd,
-                        spinupcheck=spinupcheck, thresholdspin=thresholdspin)
+                         temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
+                         SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
+                         decomposition_param_RothC=decomposition_param_RothC,t_spinup=t_spinup,t_fwd=t_fwd,
+                         spinupcheck=spinupcheck, thresholdspin=thresholdspin)
+  print("RothC")
   print(Roth_C_fwd)
   
   #CALL ICBM
   ICBM_C_fwd<-Call_ICBM(plot_figures=plot_figures,
-                         temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
-                         SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
-                         decomposition_param_ICBM=decomposition_param_ICBM,t_spinup=t_spinup,t_fwd=t_fwd,
+                        temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
+                        SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,soil_thickness=soil_thickness,
+                        decomposition_param_ICBM=decomposition_param_ICBM,t_spinup=t_spinup,t_fwd=t_fwd,
                         spinupcheck=spinupcheck, thresholdspin=thresholdspin)
+  print("ICBM")
   print(ICBM_C_fwd)
   
   #CALL CENTURY
   Century_C_fwd<-Call_Century(plot_figures=plot_figures,
                               temperature=temperature, precipitation=precipitation, potential_evapotranspiration=potential_evapotranspiration,
                               SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,clay_p=clay_p,silt_p=silt_p,
-                         lignin_to_nitrogen=lignin_to_nitrogen, structural_in_lignin=structural_in_lignin,
-                         decomposition_param_Century=decomposition_param_Century,
-                         t_spinup=t_spinup,t_fwd=t_fwd,
+                              lignin_to_nitrogen=lignin_to_nitrogen, structural_in_lignin=structural_in_lignin,
+                              decomposition_param_Century=decomposition_param_Century,
+                              t_spinup=t_spinup,t_fwd=t_fwd,
                               spinupcheck=spinupcheck, thresholdspin=thresholdspin)
-
+  print("Century")
   print(Century_C_fwd)
   
   #CALL YASSO07
   Yasso07_C_fwd<-Call_Yasso07(plot_figures=plot_figures,
-               temperature=temperature, precipitation=precipitation, woodylittersize=woodylittersize,
-               #simulation_length=simulation_length, #remove once Yasso function for temp and moist implemented
-               SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,
-               decomposition_param_Yasso07=decomposition_param_Yasso07,
-               t_spinup=t_spinup,t_fwd=t_fwd, 
+                              temperature=temperature, precipitation=precipitation, woodylittersize=woodylittersize,
+                              #simulation_length=simulation_length, #remove once Yasso function for temp and moist implemented
+                              SOC_0=SOC_0,C_input_spinup=C_input_spinup,C_input_fwd=C_input_fwd,
+                              decomposition_param_Yasso07=decomposition_param_Yasso07,
+                              t_spinup=t_spinup,t_fwd=t_fwd, 
                               spinupcheck=spinupcheck, thresholdspin=thresholdspin)
-
+  print("Yasso07")
   print(Yasso07_C_fwd)
   
   #CALL AMG
@@ -175,15 +177,20 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
                       decomposition_param_AMG=decomposition_param_AMG,
                       historical_land_use=historical_land_use,
                       t_fwd=t_fwd)
-  
+  print("AMG")
   print(AMG_C_fwd)
   
   #CALL SG
   SG_C_fwd<-Call_SG(CN_Ratio=CN_Ratio, Bulk_Density=Bulk_Density, WFPS=WFPS, vswc=vswc, Soil_Temperature=temperature, CH4_Conc=CH4_Conc)
+  print("SG")
+  print(SG_C_fwd)
   #Select only sought solutions
   SG_C_fwd<-SG_C_fwd[c(1:length(t_fwd)),]
-  SG_C_fwd[,1]=SG_C_fwd[,1]*(1e-12*1e4*3.171e8*computation_time_step_fwd) #convert CO2: from ugC/m2/sec to tC/ha/time
-  SG_C_fwd[,c(2,3)]=SG_C_fwd[,c(2,3)]*(1e-12*1e4*8760*computation_time_step_fwd) #convert CO2: from ug/m2/hour to tC/ha/time
+  #SG_C_fwd[,1]=SG_C_fwd[,1]*(1e-12*1e4*3.171e8*computation_time_step_fwd) #convert CO2: from ugC/m2/sec to tC/ha/time
+  SG_C_fwd[,1]=SG_C_fwd[,1]*(1e-12*1e4*3.171e7) #convert CO2: from ugC/m2/sec to tC/ha/year
+  #SG_C_fwd[,c(2,3)]=SG_C_fwd[,c(2,3)]*(1e-12*1e4*8760*computation_time_step_fwd) #convert CO2: from ug/m2/hour to tC/ha/time
+  SG_C_fwd[,c(2,3)]=SG_C_fwd[,c(2,3)]*(1e-12*1e4*8760) #convert CO2: from ug/m2/hour to tC/ha/year
+  print("SG after conversion")
   print(SG_C_fwd)
   
   #Plot SG fluxes
@@ -200,11 +207,11 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
     legend_SG<-c("CH4", "N20")
     #plot the pools
     matplot(t_fwd, SG_C_fwd[,c(2,3)], type="l", lty=1, col=1:2,
-            xlab="Time (years)", ylab=paste0("Fluxes (tC/ha/",time_legend,")"),main="SG fluxes")
+            xlab="Time (years)", ylab=paste0("Fluxes (tC/ha/year)"),main="SG fluxes")
     legend("topleft", legend_SG,
            lty=1, col=1:2, bty="n")
   }
-
+  
   #Calculate total SOC stock
   totC_Roth_C_fwd<-rowSums(Roth_C_fwd[[2]])
   totC_ICBM_C_fwd<-rowSums(ICBM_C_fwd[[2]])
@@ -213,48 +220,51 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
   totC_AMG_C_fwd<-rowSums(AMG_C_fwd[[2]])
   #Calculate multi-model mean of total SOC stock
   mmmean_totC <- rowMeans(cbind(totC_Roth_C_fwd,totC_ICBM_C_fwd,
-                          totC_Century_C_fwd,totC_Yasso07_C_fwd,
-                          totC_AMG_C_fwd))
+                                totC_Century_C_fwd,totC_Yasso07_C_fwd,
+                                totC_AMG_C_fwd))
   
   #Calculate total CO2 fluxes
   totF_Roth_C_fwd<-rowSums(Roth_C_fwd[[1]])
   totF_ICBM_C_fwd<-rowSums(ICBM_C_fwd[[1]])
-  totF_Century_C_fwd<-rowSums(Century_C_fwd[[1]])
+  totF_Century_C_fwd<-rowSums(Century_C_fwd[[1]])*12 #convert fluxes from MgC/ha/month to MgC/ha/year
   totF_Yasso07_C_fwd<-rowSums(Yasso07_C_fwd[[1]])
   totF_AMG_C_fwd<-rowSums(AMG_C_fwd[[1]])
   #Calculate multi-model mean of total CO2 fluxes
   mmmean_totF <- rowMeans(cbind(totF_Roth_C_fwd,totF_ICBM_C_fwd,
                                 totF_Century_C_fwd,totF_Yasso07_C_fwd,
-                                totF_AMG_C_fwd))
+                                totF_AMG_C_fwd,SG_C_fwd[,1]))
   
   #PLOT MULTIMODEL
+  express_plotC = expression("SOC stocks (MgC"~{ha}^{-1}~")")
   if(plot_figures==TRUE){
     #plot total C stocks
-    plot(t_fwd, totC_Roth_C_fwd, type="l", lty=1, col="red",
-            xlab="Time (years)", ylab="C stocks (MgC/ha)", ylim=c(50,70),main="Multi-model SOC stocks")
+    plot(t_fwd, totC_Roth_C_fwd, type="l", lty=1,xlab="Time (years)",ylab=" ",col="red", ylim=c(50,70))
+    title(ylab=express_plotC,main="Multi-model SOC stocks",mgp=c(2,1,0))
     lines(t_fwd,totC_ICBM_C_fwd,type="l", lty=1, col="black")
     lines(t_fwd,totC_Century_C_fwd,type="l", lty=1, col="green")
     lines(t_fwd,totC_Yasso07_C_fwd,type="l", lty=1, col="pink")
     lines(t_fwd,totC_AMG_C_fwd,type="l", lty=1, col="blue")
     lines(t_fwd,mmmean_totC,type="l", lwd = 3,col="grey")
-    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG","Mean"),
-           lty=1,lwd=c(1,1,1,1,1,3), col=c("red","black","green","pink","blue","grey"),ncol=2, bty="n")
+    legend(par('usr')[2], par('usr')[4], c("RothC", "ICBM","Century","Yasso07","AMG","Mean"),
+           lty=1,lwd=c(1,1,1,1,1,3), col=c("red","black","green","pink","blue","grey"),
+           cex=0.8,xpd=NA,bty="n")
     
     #plot CO2 fluxes
-
-    plot(t_fwd, rowSums(Roth_C_fwd[[1]]), type="l", lty=1, col="red",
-         xlab="Time (years)", ylab=paste0("CO2 fluxes (MgC/ha/",time_legend,")"), ylim=c(-1,10),main="Multi-model CO2 fluxes")
-    lines(t_fwd,rowSums(ICBM_C_fwd[[1]]),type="l", lty=1, col="black")
-    lines(t_fwd,rowSums(Century_C_fwd[[1]]),type="l", lty=1, col="green")
-    lines(t_fwd,rowSums(Yasso07_C_fwd[[1]]),type="l", lty=1, col="pink")
-    lines(t_fwd,rowSums(AMG_C_fwd[[1]]),type="l", lty=1, col="blue")
+    express_plotF = expression(CO[2]~"flux (MgC"~{ha}^{-1}*{year}^{-1}~")")
+    
+    plot(t_fwd, totF_Roth_C_fwd, type="l", lty=1, xlab="Time (years)",ylab=" ",col="red",ylim=c(-1,20))
+    title(ylab=express_plotF,main="Multi-model CO2 fluxes",mgp=c(2,1,0))
+    lines(t_fwd,totF_ICBM_C_fwd,type="l", lty=1, col="black")
+    lines(t_fwd,totF_Century_C_fwd,type="l", lty=1, col="green")
+    lines(t_fwd,totF_Yasso07_C_fwd,type="l", lty=1, col="pink")
+    lines(t_fwd,totF_AMG_C_fwd,type="l", lty=1, col="blue")
     lines(t_fwd, SG_C_fwd[,1],type="l", lty=1, col="violet")
     lines(t_fwd,mmmean_totF,type="l", lwd = 3,col="grey")
-    legend("topleft", c("RothC", "ICBM","Century","Yasso07","AMG","SG","Mean"),
-           lty=1,lwd=c(1,1,1,1,1,3), col=c("red","black","green","pink","blue","violet","grey"), ncol=2,bty="n")
+    legend(par('usr')[2], par('usr')[4], c("RothC", "ICBM","Century","Yasso07","AMG","SG","Mean"),
+           lty=1,lwd=c(1,1,1,1,1,1,3), col=c("red","black","green","pink","blue","violet","grey"), cex=0.8,xpd=NA,bty="n")
     
   }
-
+  
   return(list(Roth_C_fwd,ICBM_C_fwd,Century_C_fwd))
   
 }
