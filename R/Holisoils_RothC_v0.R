@@ -109,7 +109,7 @@ Call_RothC<-function(plot_figures,
   
   FYM=data.frame(time=ts_fwd_RothC,FYM=rep(0,length(InRothC_fwd)))
   
-  RothC_fwd=RothCModel(t=ts_fwd_RothC,C0=CRothC_pools_relax,
+  RothC_fwd=RothCModel(t=ts_fwd_RothC,ks=decomposition_param_RothC,C0=CRothC_pools_relax,
                        In=InRothC,FYM=FYM, clay=clay_p, xi=xi.frame_RothC)
   
   #Convert variables out
