@@ -71,14 +71,14 @@ ksAMG = c(k0=0.165,humABOVE=0.5,humBELOW=0.4)
 #----------------
 #Temperature data
 #----------------
-#Read daily temperature data
+#Read daily soil temperature data
 temp_df <- read.delim(paste0(loc_forc,"942217_TAS_2001_2005.txt"),sep = ":")[,2]
 temp_df <- as.numeric(as.character((temp_df[7:length(temp_df)])))-273.15 #K to C
 #Repeat because not enough data
 temp_df <- c(temp_df,temp_df) #Repeat 2001-2005 twice
 #Create a dataframe for daily temperature
 Temp_day <- data.frame("Date"=seq(from = as.Date("2001-01-01"), to = as.Date("2010-12-31"), by = 'day'),"Temp"=temp_df)
-#Convert daily temperature to monthly average temperature
+#Convert daily soil temperature to monthly average soil temperature
 Temp_month <- aggregate(Temp_day, list(format(Temp_day$Date,"%Y-%m")),mean, na.rm = TRUE)
 #Add dates to dataframe
 Temp_month$Date<-as.Date(paste(Temp_month$Group.1,"-01",sep=""))
