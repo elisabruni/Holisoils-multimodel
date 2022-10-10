@@ -265,6 +265,6 @@ Call_MULTIMODEL<-function(plot_figures,simulation_length, spinup_length,
     
   }
   
-  return(list(Roth_C_fwd,ICBM_C_fwd,Century_C_fwd))
+  return(list(Roth_C_fwd,ICBM_C_fwd,Century_C_fwd,Yasso07_C_fwd,AMG_C_fwd))
   
 }
