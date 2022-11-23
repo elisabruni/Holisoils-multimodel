@@ -12,6 +12,8 @@
 # by Boris Tupek boris.tupek@luke.fi
 # Dec 2019
 
+#Import SoilR library
+library(SoilR)
 
 #Yasso07 model as in Tuomi et al. 2011 ecological applications
 Yasso07Modelfi <- function (t, #years
