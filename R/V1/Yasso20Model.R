@@ -9,19 +9,31 @@
 #Import SoilR library
 library(SoilR)
 
+
 #Yasso20 as in Viskari et al 2022
 Yasso20Modelfi <- function (t, #years
                             #decomposition rates
                             #------------
                             #Viskari et al 2022
                             #------------
-                            #decomposition params
+                            # #decomposition params
                             ksY = c(kA = 0.51, kW = 5.19, kE = 0.13, kN = 0.1, kH = 0.0015),
                             #transfers and feedbacks
-                            pY = c( p1 = 0.5, p2 =0, p3 = 1.,
-                                    p4 = 1, p5 = 0.99, p6 = 0.,
-                                    p7 = 0, p8 = 0., p9 = 0.,
-                                    p10 = 0, p11 = 0.163, p12 = 0.,
+                            # pY = c( p1 = 0.5, p2 =0, p3 = 1,
+                            #         p4 = 1, p5 = 0.99, p6 = 0.,
+                            #         p7 = 0, p8 = 0., p9 = 0.,
+                            #         p10 = 0, p11 = 0.163, p12 = 0.,
+                            #         pH = 0.0042),
+                            #TESTS on Viskari parametrization
+                            #Problem here is with pools A and N
+                            #Decreasing for instance p4 (transfer from A to W) and p3 (trnasfer from N to A) solves the issue
+                            #transfers and feedbacks
+                            #Now p3 and p4 are defined as in Viskari et al., 2022 = 1-pH
+                            #But we substract epsilon = 1e-16 to compensate for R calculation approximations
+                            pY = c( p1 = 0.5, p2 =0., p3 = 1-0.0042-1e-15,
+                                    p4 =1-0.0042-1e-15, p5 = 0.99, p6 = 0.,
+                                    p7 = 0., p8 = 0., p9 = 0.,
+                                    p10 = 0., p11 = 0.163, p12 = 0.,
                                     pH = 0.0042),
                             #environmental dependence params
                             beta1 = c(beta1AWE=0.158, beta1N=0.17, beta1H=0.067),
@@ -41,10 +53,11 @@ Yasso20Modelfi <- function (t, #years
                             # # pY = c(p1 = 4.362893e-01, p2 =2.499740e-01, p3 = 9.151269e-01, p4 = 9.925823e-01,
                             # #        p5 = 8.385374e-02, p6 = 1.147678e-02, p7 = 6.083150e-04, p8 = 4.761282e-04, p9 = 6.603773e-02, p10 = 7.713417e-04,
                             # #        p11 = 1.040174e-01, p12 = 6.488076e-01, pH = 4.596472e-03),
-                            # #PROBLEM WITH PARAM p3 in sample_parameters!!
-                            # #Needs to be set to 0.3 max to respect mass balance
+                            # #Problem here is with pool N
+                            # # Can be solved by changing p3 in sample_parameters!!
+                            # #p3 needs to be set to 0.36 max to respect mass balance
                             # #https://github.com/YASSOmodel/Ryassofortran/tree/master/data
-                            # pY = c(p1 = 4.362893e-01, p2 =2.499740e-01, p3 = 0.3, p4 = 9.925823e-01,
+                            # pY = c(p1 = 4.362893e-01, p2 =2.499740e-01, p3 = 0.4, p4 = 9.925823e-01,
                             #        p5 = 8.385374e-02, p6 = 1.147678e-02, p7 = 6.083150e-04, p8 = 4.761282e-04, p9 = 6.603773e-02, p10 = 7.713417e-04,
                             #        p11 = 1.040174e-01, p12 = 6.488076e-01, pH = 4.596472e-03),
                             # #environmental dependence params
@@ -90,8 +103,11 @@ Yasso20Modelfi <- function (t, #years
   Ap[4, 3] = pY[12]
   Ap[5, 1:4] = pY[13]
   
+  print(" ")
   print("Ap")
   print(Ap)
+  print("Sum of columns Ap")
+  print(colSums(Ap))
   
   # add Woody litter size dependence to structural matrix
   # WS in cm, e.g. 0 for nonwoody, 2 for finewoody, 20 - for coarsewoody litter
@@ -100,15 +116,17 @@ Yasso20Modelfi <- function (t, #years
     ksY.ws = c(ksY[1:4]*(1+delta1*WS+delta2*(WS^2))^(-abs(r)),ksY[5])
     print(ksY.ws)
     A1.ws = abs(diag(ksY.ws))
-    AYS.ws = Ap %*% A1.ws
+    #AYS.ws = Ap %*% A1.ws
     #print(AYS.ws)
-    return(AYS.ws)
+    return(A1.ws)
   }
   AYS.ws <- AYS.wsfun(WS)
+  print(" ")
   print("AYS.ws")
   print(AYS.ws)
-  print("Transfers sum")
+  print("Column sums AYS.ws")
   print(colSums(AYS.ws))
+  
   #LitterInput
   if (length(In[1,]) == 6){
     LI = as.matrix(In[,2:6]) #first column for years, 2:6 for AWEN
@@ -157,8 +175,10 @@ Yasso20Modelfi <- function (t, #years
     ENV_dep = temp_dep_vec[1:3]*(1-exp(gamma["g"]*PR_mmX/1000))/12
     ENV_depN = temp_dep_vec[4]*(1-exp(gamma["gN"]*PR_mmX/1000))/12
     ENV_depH = temp_dep_vec[5]*(1-exp(gamma["gH"]*PR_mmX/1000))/12
-    
-    ENV_vector =  c(ENV_dep,ENV_depN,ENV_depH)
+
+    ENV_vector =  as.numeric(c(ENV_dep,ENV_depN,ENV_depH))
+    # ENV_vector =  rep(1.92406,5)
+    # print("ENV_vector")
     # print(ENV_vector)
     return(ENV_vector)
   }
@@ -180,7 +200,7 @@ Yasso20Modelfi <- function (t, #years
     #woody size but NO environtal effect 
     #if woody size 0 than no woody size too
     AYS.Ews_t=BoundLinDecompOp(
-      function(t){AYS.ws},
+      function(t){Ap %*%AYS.ws},
       t_start,
       t_end
     )
@@ -188,22 +208,35 @@ Yasso20Modelfi <- function (t, #years
     #woody size and environtal effect
     AYS.Ews_t=BoundLinDecompOp(
       function(t){
-        # ## print(diag(xiE(t))%*%AYS.ws)
-        # ## diag(xiE(t))%*%AYS.ws
-        # if(length(xiE(t))==0){
-        #   #print(xiE(t)*AYS.ws)
-        #   xiE(t)*AYS.ws
-        # }else{
-        #   # print(diag(xiE(t)))
-        #   # print(AYS.ws)
-        #   # print(diag(xiE(t))%*%AYS.ws)
-        #   diag(xiE(t))%*%AYS.ws
-        # }
-        print("xiE(t)")
-        print(xiE(t))
-        print("xiE(t)*AYS.ws")
-        print(xiE(t)*AYS.ws)
-        xiE(t)*AYS.ws
+        if(length(xiE(t))==0){
+          Ap *xiE(t)*AYS.ws
+        }else{
+          print("^^^^^^^^^^^^^^^^^^^^")
+          print("^^^^^^^^^^^^^^^^^^^^")
+          print("^^^^^^^^^^^^^^^^^^^^")
+          # print(is.double(diag(xiE(t))))
+          # print(is.double(AYS.ws))
+          # print(is.double(Ap))
+          print(diag(xiE(t)))
+          print(AYS.ws)
+          print(" ")
+          print("Matrix xiE ")
+          print(diag(xiE(t)))
+          print(" ")
+          print("Matrix AYS.Ews_t ")
+          print(Ap %*%diag(xiE(t))%*%AYS.ws)
+          print("Sum of columns AYS.Ews_t ")
+          print(colSums(Ap %*%diag(xiE(t))%*%AYS.ws))
+          print("Sum of rows AYS.Ews_t ")
+          print(rowSums(Ap %*%diag(xiE(t))%*%AYS.ws))
+          Ap %*%diag(xiE(t))%*%AYS.ws
+        }
+        # print("xiE(t)")
+        # print(xiE(t))
+        # print("xiE(t)*AYS.ws")
+        # print(xiE(t)*AYS.ws)
+        # print(colSums(xiE(t)*AYS.ws))
+        # xiE(t)*AYS.ws
       }
       ,
       t_start,
